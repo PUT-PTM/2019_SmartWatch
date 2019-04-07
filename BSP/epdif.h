@@ -28,7 +28,7 @@
 #ifndef EPDIF_H
 #define EPDIF_H
 
-#include "../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 // Pin definition
 #define CS_PIN           0
