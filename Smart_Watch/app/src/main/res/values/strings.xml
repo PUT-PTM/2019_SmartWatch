@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Smart_Watch</string>
+    <string name="disp_time">Pokaz czas</string>
+    <string name="sms_btn">SMS</string>
+</resources>
