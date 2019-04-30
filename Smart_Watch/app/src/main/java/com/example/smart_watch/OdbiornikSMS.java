@@ -8,7 +8,9 @@ import android.telephony.SmsMessage;
 import android.widget.Toast;
 
 final public class OdbiornikSMS extends BroadcastReceiver {
+
     @Override
+
     public void onReceive(Context context, Intent intent) {
         Bundle bundle =intent.getExtras();
         SmsMessage[] msgs=null;
@@ -19,6 +21,8 @@ final public class OdbiornikSMS extends BroadcastReceiver {
             msgs[x]=SmsMessage.createFromPdu((byte[])pdus[x]);
             wiadomosc=msgs[x].getMessageBody();
             Toast.makeText(context,wiadomosc,Toast.LENGTH_LONG).show();
+
+
         }
     }
 }
