@@ -23,11 +23,12 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     Button wykryj_bluetooth, pokaz_sparowane, btn_czas;
+    TextView tekst;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final TextView tekst=(TextView)findViewById(R.id.TEXT);
+        tekst=(TextView)findViewById(R.id.TEXT);
         btn_czas=(Button)findViewById(R.id.CZAS);
         wykryj_bluetooth=(Button)findViewById(R.id.wykryj);
         pokaz_sparowane=(Button)findViewById(R.id.pokaz_spar);
@@ -73,12 +74,14 @@ public class MainActivity extends AppCompatActivity {
                     status="sparowane";
                 }
                 Log.d("INFO", "znaleziono urzadzenie"+device.getName()+" - "+device.getAddress());
+                tekst.setText("Znaleziono urządzenie"+device.getName()+" - "+device.getAddress());
             }
 
         }
     };
     public void wykryjInne(){
         Log.d("Info","Szukam innych urzadzen(ok 12s)");
+        tekst.setText("Szukam innych urzadzen(ok 12s)");
         IntentFilter filtr=new IntentFilter(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(odbiorca,filtr);
         BluetoothAdapter ba =BluetoothAdapter.getDefaultAdapter();
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         if(pairedDevices.size()>0){
             for(BluetoothDevice device : pairedDevices){
                 Log.d("INFO",device.getName()+" - "+device.getAddress());
+                tekst.setText(device.getName()+" - "+device.getAddress());
             }
         }
     }
