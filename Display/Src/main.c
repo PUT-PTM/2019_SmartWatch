@@ -113,6 +113,13 @@ int main(void)
    Paint_Init(&paint, frame_buffer, epd.width, epd.height);
    Paint_Clear(&paint, UNCOLORED);
 
+      EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+      EPD_DisplayFrame(&epd);
+      EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 1000);
+      Paint_Clear(&paint, UNCOLORED);
+      EPD_DelayMs(&epd, 1000);
    /* For simplicity, the arguments are explicit numerical coordinates */
    /* Write strings to the buffer */
    Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
@@ -134,6 +141,29 @@ int main(void)
    EPD_DisplayFrame(&epd);
    EPD_DelayMs(&epd, 2000);
 
+   Paint_Clear(&paint, UNCOLORED);
+
+      /* For simplicity, the arguments are explicit numerical coordinates */
+      /* Write strings to the buffer */
+      Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
+      Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
+   //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
+      Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
+      Paint_DrawStringAt(&paint, 20, 80, "Druga losowa wiadomosc", &Font12, COLORED);
+
+      /* Draw something to the frame buffer */
+
+   //   Paint_DrawLine(&paint, 10, 60, 50, 110, COLORED);
+   //   Paint_DrawLine(&paint, 50, 60, 10, 110, COLORED);
+   //   Paint_DrawCircle(&paint, 120, 80, 30, COLORED);
+   //   Paint_DrawFilledRectangle(&paint, 10, 130, 50, 180, COLORED);
+   //   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
+
+      /* Display the frame_buffer */
+      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 2000);
+
    if (EPD_Init(&epd, lut_partial_update) != 0) {
      printf("e-Paper init failed\n");
      return -1;
@@ -150,6 +180,12 @@ int main(void)
 //   EPD_DisplayFrame(&epd);
 //////
 //   time_start_ms = HAL_GetTick();
+
+   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+   EPD_DisplayFrame(&epd);
+   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+   EPD_DisplayFrame(&epd);
+   EPD_DelayMs(&epd, 1000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
