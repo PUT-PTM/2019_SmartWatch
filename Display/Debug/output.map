@@ -2589,7 +2589,7 @@ Discarded input sections
  .text.HAL_SPI_MspDeInit
                 0x00000000       0x2c Src/stm32f4xx_hal_msp.o
  .text.HAL_UART_MspDeInit
-                0x00000000       0x2c Src/stm32f4xx_hal_msp.o
+                0x00000000       0x50 Src/stm32f4xx_hal_msp.o
  .debug_macro   0x00000000      0xa60 Src/stm32f4xx_hal_msp.o
  .debug_macro   0x00000000      0x18c Src/stm32f4xx_hal_msp.o
  .debug_macro   0x00000000       0x32 Src/stm32f4xx_hal_msp.o
@@ -3687,7 +3687,7 @@ LOAD c:/ac6/systemworkbench/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.17
                 0x00000998       0x22 c:/ac6/systemworkbench/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.17.0.201812190825/tools/compiler/bin/../lib/gcc/arm-none-eabi/7.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
 OUTPUT(SmartWatchTymRazemSerio.elf elf32-littlearm)
 
-.debug_info     0x00000000     0xce5c
+.debug_info     0x00000000     0xce7a
  .debug_info    0x00000000      0x9cc Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_info    0x000009cc      0xf3a Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_info    0x00001906      0x770 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -3702,10 +3702,10 @@ OUTPUT(SmartWatchTymRazemSerio.elf elf32-littlearm)
  .debug_info    0x00008b21      0x147 Src/font16.o
  .debug_info    0x00008c68       0x5d Src/imagedata.o
  .debug_info    0x00008cc5     0x1fe6 Src/main.o
- .debug_info    0x0000acab      0xcb5 Src/stm32f4xx_hal_msp.o
- .debug_info    0x0000b960      0xfd3 Src/syscalls.o
- .debug_info    0x0000c933      0x507 Src/system_stm32f4xx.o
- .debug_info    0x0000ce3a       0x22 startup/startup_stm32f407xx.o
+ .debug_info    0x0000acab      0xcd3 Src/stm32f4xx_hal_msp.o
+ .debug_info    0x0000b97e      0xfd3 Src/syscalls.o
+ .debug_info    0x0000c951      0x507 Src/system_stm32f4xx.o
+ .debug_info    0x0000ce58       0x22 startup/startup_stm32f407xx.o
 
 .debug_abbrev   0x00000000     0x2002
  .debug_abbrev  0x00000000      0x1f1 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
@@ -3727,7 +3727,7 @@ OUTPUT(SmartWatchTymRazemSerio.elf elf32-littlearm)
  .debug_abbrev  0x00001edf      0x111 Src/system_stm32f4xx.o
  .debug_abbrev  0x00001ff0       0x12 startup/startup_stm32f407xx.o
 
-.debug_loc      0x00000000     0x57aa
+.debug_loc      0x00000000     0x57c3
  .debug_loc     0x00000000       0xfd Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_loc     0x000000fd      0x5ce Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_loc     0x000006cb      0x497 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -3738,9 +3738,9 @@ OUTPUT(SmartWatchTymRazemSerio.elf elf32-littlearm)
  .debug_loc     0x0000440a       0xd5 Src/epdif.o
  .debug_loc     0x000044df      0xca0 Src/epdpaint.o
  .debug_loc     0x0000517f       0x3d Src/main.o
- .debug_loc     0x000051bc      0x101 Src/stm32f4xx_hal_msp.o
- .debug_loc     0x000052bd      0x3af Src/syscalls.o
- .debug_loc     0x0000566c      0x13e Src/system_stm32f4xx.o
+ .debug_loc     0x000051bc      0x11a Src/stm32f4xx_hal_msp.o
+ .debug_loc     0x000052d6      0x3af Src/syscalls.o
+ .debug_loc     0x00005685      0x13e Src/system_stm32f4xx.o
 
 .debug_aranges  0x00000000      0x9e0
  .debug_aranges
@@ -3906,7 +3906,7 @@ OUTPUT(SmartWatchTymRazemSerio.elf elf32-littlearm)
  .debug_macro   0x00021367       0x88 Src/syscalls.o
  .debug_macro   0x000213ef      0x1ca Src/system_stm32f4xx.o
 
-.debug_line     0x00000000     0x86d7
+.debug_line     0x00000000     0x86de
  .debug_line    0x00000000      0x8f3 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_line    0x000008f3      0x949 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_line    0x0000123c      0x87f Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -3921,10 +3921,10 @@ OUTPUT(SmartWatchTymRazemSerio.elf elf32-littlearm)
  .debug_line    0x00006626      0x2be Src/font16.o
  .debug_line    0x000068e4       0x42 Src/imagedata.o
  .debug_line    0x00006926      0x8d4 Src/main.o
- .debug_line    0x000071fa      0x772 Src/stm32f4xx_hal_msp.o
- .debug_line    0x0000796c      0x5d1 Src/syscalls.o
- .debug_line    0x00007f3d      0x71b Src/system_stm32f4xx.o
- .debug_line    0x00008658       0x7f startup/startup_stm32f407xx.o
+ .debug_line    0x000071fa      0x779 Src/stm32f4xx_hal_msp.o
+ .debug_line    0x00007973      0x5d1 Src/syscalls.o
+ .debug_line    0x00007f44      0x71b Src/system_stm32f4xx.o
+ .debug_line    0x0000865f       0x7f startup/startup_stm32f407xx.o
 
 .debug_str      0x00000000    0xc4514
  .debug_str     0x00000000    0xbd028 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
