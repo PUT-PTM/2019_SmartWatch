@@ -20,9 +20,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "stm32f4xx_hal.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "stm32f4xx_hal.h"
 #include "epd1in54.h"
 #include "epdif.h"
 #include "epdpaint.h"
@@ -49,7 +50,11 @@
 SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart2;
-
+UART_HandleTypeDef huart3;
+uint8_t sendUART[2] = {65, 'B'};
+uint16_t sizeSendUART = 2;
+uint8_t receiveUART[1];
+uint16_t sizeReceiveUART = 1;
 /* USER CODE BEGIN PV */
 #define COLORED      0
 #define UNCOLORED    1
@@ -60,13 +65,13 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -102,7 +107,10 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_USART2_UART_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+  HAL_UART_Transmit_IT(&huart3, sendUART, sizeSendUART);
+
   EPD epd;
    if (EPD_Init(&epd, lut_full_update) != 0) {
      printf("e-Paper init failed\n");
@@ -113,6 +121,13 @@ int main(void)
    Paint_Init(&paint, frame_buffer, epd.width, epd.height);
    Paint_Clear(&paint, UNCOLORED);
 
+      EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+      EPD_DisplayFrame(&epd);
+      EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 1000);
+      Paint_Clear(&paint, UNCOLORED);
+      EPD_DelayMs(&epd, 1000);
    /* For simplicity, the arguments are explicit numerical coordinates */
    /* Write strings to the buffer */
    Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
@@ -134,6 +149,29 @@ int main(void)
    EPD_DisplayFrame(&epd);
    EPD_DelayMs(&epd, 2000);
 
+   Paint_Clear(&paint, UNCOLORED);
+
+      /* For simplicity, the arguments are explicit numerical coordinates */
+      /* Write strings to the buffer */
+      Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
+      Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
+   //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
+      Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
+      Paint_DrawStringAt(&paint, 20, 80, "Druga losowa wiadomosc", &Font12, COLORED);
+
+      /* Draw something to the frame buffer */
+
+   //   Paint_DrawLine(&paint, 10, 60, 50, 110, COLORED);
+   //   Paint_DrawLine(&paint, 50, 60, 10, 110, COLORED);
+   //   Paint_DrawCircle(&paint, 120, 80, 30, COLORED);
+   //   Paint_DrawFilledRectangle(&paint, 10, 130, 50, 180, COLORED);
+   //   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
+
+      /* Display the frame_buffer */
+      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 2000);
+
    if (EPD_Init(&epd, lut_partial_update) != 0) {
      printf("e-Paper init failed\n");
      return -1;
@@ -150,6 +188,13 @@ int main(void)
 //   EPD_DisplayFrame(&epd);
 //////
 //   time_start_ms = HAL_GetTick();
+
+   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+   EPD_DisplayFrame(&epd);
+   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+   EPD_DisplayFrame(&epd);
+   EPD_DelayMs(&epd, 1000);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -293,6 +338,39 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART3_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART3_Init 0 */
+
+  /* USER CODE END USART3_Init 0 */
+
+  /* USER CODE BEGIN USART3_Init 1 */
+
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 115200;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART3_Init 2 */
+
+  /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -304,17 +382,24 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DC_GPIO_Port, DC_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(RST_GPIO_Port, RST_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI_CS_GPIO_Port, SPI_CS_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PA4 RST_Pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_4|RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : DC_Pin */
   GPIO_InitStruct.Pin = DC_Pin;
@@ -328,13 +413,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BUSY_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : RST_Pin */
-  GPIO_InitStruct.Pin = RST_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(RST_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPI_CS_Pin */
   GPIO_InitStruct.Pin = SPI_CS_Pin;

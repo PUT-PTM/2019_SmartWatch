@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/Szymon/Desktop/STMePaper/SmartWatchTymRazemSerio/Inc
+HeaderPath=C:/Users/Szymon/Desktop/STMePaper/2019_SmartWatch/Display/Inc
 HeaderFiles=stm32f4xx_it.h;stm32f4xx_hal_conf.h;main.h;
-SourcePath=C:/Users/Szymon/Desktop/STMePaper/SmartWatchTymRazemSerio/Src
+SourcePath=C:/Users/Szymon/Desktop/STMePaper/2019_SmartWatch/Display/Src
 SourceFiles=stm32f4xx_it.c;stm32f4xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]
