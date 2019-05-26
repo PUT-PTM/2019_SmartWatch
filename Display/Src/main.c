@@ -58,6 +58,8 @@ uint16_t sizeReceiveUART = 1;
 /* USER CODE BEGIN PV */
 #define COLORED      0
 #define UNCOLORED    1
+int conn = 0;
+int licznik = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,7 +84,9 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	unsigned char* frame_buffer = (unsigned char*)malloc(EPD_WIDTH * EPD_HEIGHT / 8);
-	  char time_string[] = {'0', '0', ':', '0', '0', '\0'};
+	  char time_string[] = {'1', '3', ':', '5', '6', '\0'};
+	  char sms_string[] = {'_', '_', '_', '_', '_', '_','_','_','_','_','_','_','_','_','_','\0'};
+
 	  unsigned long time_start_ms;
 	  unsigned long time_now_s;
   /* USER CODE END 1 */
@@ -121,20 +125,21 @@ int main(void)
    Paint_Init(&paint, frame_buffer, epd.width, epd.height);
    Paint_Clear(&paint, UNCOLORED);
 
-      EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
-      EPD_DisplayFrame(&epd);
-      EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
-      EPD_DisplayFrame(&epd);
-      EPD_DelayMs(&epd, 1000);
-      Paint_Clear(&paint, UNCOLORED);
-      EPD_DelayMs(&epd, 1000);
+  Paint_Clear(&paint, UNCOLORED);
+  EPD_DelayMs(&epd, 1000);
    /* For simplicity, the arguments are explicit numerical coordinates */
    /* Write strings to the buffer */
-   Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
-   Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
+
+  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+  Paint_DrawStringAt(&paint, 80, 50, "...", &Font16, COLORED);
+
+//   Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
+//   Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
 //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
-   Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
-   Paint_DrawStringAt(&paint, 20, 80, "Jakas losowa wiadomosc", &Font12, COLORED);
+
+
+//   Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
+//   Paint_DrawStringAt(&paint, 20, 80, "Jakas losowa wiadomosc", &Font12, COLORED);
 
    /* Draw something to the frame buffer */
 
@@ -145,19 +150,14 @@ int main(void)
 //   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
 
    /* Display the frame_buffer */
-   EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-   EPD_DisplayFrame(&epd);
-   EPD_DelayMs(&epd, 2000);
-
-   Paint_Clear(&paint, UNCOLORED);
 
       /* For simplicity, the arguments are explicit numerical coordinates */
-      /* Write strings to the buffer */
-      Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
-      Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
-   //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
-      Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
-      Paint_DrawStringAt(&paint, 20, 80, "Druga losowa wiadomosc", &Font12, COLORED);
+//      /* Write strings to the buffer */
+//      Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
+//      Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
+//   //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
+//      Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
+//      Paint_DrawStringAt(&paint, 20, 80, "Druga losowa wiadomosc", &Font12, COLORED);
 
       /* Draw something to the frame buffer */
 
@@ -170,7 +170,7 @@ int main(void)
       /* Display the frame_buffer */
       EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
       EPD_DisplayFrame(&epd);
-      EPD_DelayMs(&epd, 2000);
+      EPD_DelayMs(&epd, 2);
 
    if (EPD_Init(&epd, lut_partial_update) != 0) {
      printf("e-Paper init failed\n");
@@ -189,12 +189,6 @@ int main(void)
 //////
 //   time_start_ms = HAL_GetTick();
 
-   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
-   EPD_DisplayFrame(&epd);
-   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
-   EPD_DisplayFrame(&epd);
-   EPD_DelayMs(&epd, 1000);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -204,6 +198,67 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  if(conn == 0){
+	  Paint_Clear(&paint, UNCOLORED);
+	  EPD_DelayMs(&epd, 200);
+	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+	  Paint_DrawStringAt(&paint, 80, 50, ".", &Font16, COLORED);
+
+      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 2);
+
+
+	  Paint_Clear(&paint, UNCOLORED);
+	  EPD_DelayMs(&epd, 200);
+	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+	  Paint_DrawStringAt(&paint, 80, 50, "..", &Font16, COLORED);
+
+      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 2);
+
+
+	  Paint_Clear(&paint, UNCOLORED);
+	  EPD_DelayMs(&epd, 200);
+	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+	  Paint_DrawStringAt(&paint, 80, 50, "...", &Font16, COLORED);
+
+      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+      EPD_DisplayFrame(&epd);
+      EPD_DelayMs(&epd, 2);
+      licznik++;
+		  if (licznik == 1){
+			  conn = 1;
+		  }
+	  }
+	  else{
+		  sms_string[0] = '_';
+		 	   	   sms_string[14] = '_';
+		 Paint_Clear(&paint, UNCOLORED);
+		 EPD_DelayMs(&epd, 2);
+		 Paint_DrawRectangle(&paint, 10, 30, 190, 70, COLORED);
+		 Paint_DrawRectangle(&paint, 10, 80, 190, 170, COLORED);
+		 Paint_DrawStringAt(&paint, 110, 4, time_string, &Font24, COLORED);
+
+	   		Paint_DrawStringAt(&paint, 15, 40, sms_string, &Font16, COLORED);
+	   		Paint_DrawStringAt(&paint, 15, 100, sms_string, &Font16, COLORED);
+
+
+	   	   EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+	   	   EPD_DisplayFrame(&epd);
+	   	   EPD_DelayMs(&epd, 200);
+
+	   	   sms_string[0] = '*';
+	   	   sms_string[14] = '*';
+
+	   	Paint_DrawStringAt(&paint, 20, 40, sms_string, &Font16, COLORED);
+	    Paint_DrawStringAt(&paint, 20, 100, sms_string, &Font16, COLORED);
+	    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+	    	   	   EPD_DisplayFrame(&epd);
+	    	   	   EPD_DelayMs(&epd, 200);
+
+	  }
 //	  time_now_s = (HAL_GetTick() - time_start_ms) / 1000;
 //	    time_string[0] = time_now_s / 60 / 10 + '0';
 //	    time_string[1] = time_now_s / 60 % 10 + '0';
