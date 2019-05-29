@@ -51,13 +51,24 @@ SPI_HandleTypeDef hspi1;
 
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
-uint8_t sendUART[2] = {65, 'B'};
-uint16_t sizeSendUART = 2;
-uint8_t receiveUART[1];
-uint16_t sizeReceiveUART = 1;
+
 /* USER CODE BEGIN PV */
+unsigned char* frame_buffer;
 #define COLORED      0
 #define UNCOLORED    1
+Paint paint;
+EPD epd;
+UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart3;
+uint8_t sendUART[2] = {65, 'F'};
+uint8_t sendUART2[2] = {'X', 'X'};
+uint16_t sizeSendUART = 2;
+uint8_t receiveUART[1];
+uint8_t xd;
+uint16_t sizeReceiveUART = 1;
+int cnt;
+uint8_t time_string[] = {'1', '3', ':', '5', '6', '\0'};
+char sms_string[] = {'_', '_', '_', '_', '_', '_','_','_','_','_','_','_','_','_','_','\0'};
 int conn = 0;
 int licznik = 0;
 /* USER CODE END PV */
@@ -69,6 +80,21 @@ static void MX_SPI1_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+   if(huart->Instance == USART3){
+	   sendUART[0] = receiveUART[0];
+	   sendUART[1] = 'X';
+	   sms_string[2] = 'A';
+	   if(receiveUART[0] != '\r'){
+	   sms_string[3] = receiveUART[0];
+	   }
+
+	   for(int i = 0;i<100000;i++){}
+	HAL_UART_Receive_IT(&huart3, receiveUART, sizeReceiveUART);
+   }
+
+}
 
 /* USER CODE END PFP */
 
@@ -83,9 +109,8 @@ static void MX_USART3_UART_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+
 	unsigned char* frame_buffer = (unsigned char*)malloc(EPD_WIDTH * EPD_HEIGHT / 8);
-	  char time_string[] = {'1', '3', ':', '5', '6', '\0'};
-	  char sms_string[] = {'_', '_', '_', '_', '_', '_','_','_','_','_','_','_','_','_','_','\0'};
 
 	  unsigned long time_start_ms;
 	  unsigned long time_now_s;
@@ -108,175 +133,164 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
-  /* USER CODE BEGIN 2 */
-  HAL_UART_Transmit_IT(&huart3, sendUART, sizeSendUART);
 
-  EPD epd;
+  /* USER CODE BEGIN 2 */
+
+  HAL_UART_Receive_IT(&huart3, receiveUART, sizeReceiveUART);
+
    if (EPD_Init(&epd, lut_full_update) != 0) {
      printf("e-Paper init failed\n");
      return -1;
    }
 
-   Paint paint;
    Paint_Init(&paint, frame_buffer, epd.width, epd.height);
+
    Paint_Clear(&paint, UNCOLORED);
+   EPD_DelayMs(&epd, 1000);
+    /* For simplicity, the arguments are explicit numerical coordinates */
+    /* Write strings to the buffer */
 
-  Paint_Clear(&paint, UNCOLORED);
-  EPD_DelayMs(&epd, 1000);
-   /* For simplicity, the arguments are explicit numerical coordinates */
-   /* Write strings to the buffer */
+   Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+   Paint_DrawStringAt(&paint, 80, 50, "...", &Font16, COLORED);
 
-  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
-  Paint_DrawStringAt(&paint, 80, 50, "...", &Font16, COLORED);
-
-//   Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
-//   Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
-//   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
+ //   Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
+ //   Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
+ //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
 
 
-//   Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
-//   Paint_DrawStringAt(&paint, 20, 80, "Jakas losowa wiadomosc", &Font12, COLORED);
+ //   Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
+ //   Paint_DrawStringAt(&paint, 20, 80, "Jakas losowa wiadomosc", &Font12, COLORED);
 
-   /* Draw something to the frame buffer */
+    /* Draw something to the frame buffer */
 
-//   Paint_DrawLine(&paint, 10, 60, 50, 110, COLORED);
-//   Paint_DrawLine(&paint, 50, 60, 10, 110, COLORED);
-//   Paint_DrawCircle(&paint, 120, 80, 30, COLORED);
-//   Paint_DrawFilledRectangle(&paint, 10, 130, 50, 180, COLORED);
-//   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
+ //   Paint_DrawLine(&paint, 10, 60, 50, 110, COLORED);
+ //   Paint_DrawLine(&paint, 50, 60, 10, 110, COLORED);
+ //   Paint_DrawCircle(&paint, 120, 80, 30, COLORED);
+ //   Paint_DrawFilledRectangle(&paint, 10, 130, 50, 180, COLORED);
+ //   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
 
-   /* Display the frame_buffer */
+    /* Display the frame_buffer */
 
-      /* For simplicity, the arguments are explicit numerical coordinates */
-//      /* Write strings to the buffer */
-//      Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
-//      Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
-//   //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
-//      Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
-//      Paint_DrawStringAt(&paint, 20, 80, "Druga losowa wiadomosc", &Font12, COLORED);
+       /* For simplicity, the arguments are explicit numerical coordinates */
+ //      /* Write strings to the buffer */
+ //      Paint_DrawRectangle(&paint, 10, 10, 190, 50, COLORED);
+ //      Paint_DrawRectangle(&paint, 10, 60, 190, 150, COLORED);
+ //   //   Paint_DrawFilledRectangle(&paint, 0, 10, 200, 50, COLORED);
+ //      Paint_DrawStringAt(&paint, 80, 25, "SMS", &Font16, COLORED);
+ //      Paint_DrawStringAt(&paint, 20, 80, "Druga losowa wiadomosc", &Font12, COLORED);
 
-      /* Draw something to the frame buffer */
+       /* Draw something to the frame buffer */
 
-   //   Paint_DrawLine(&paint, 10, 60, 50, 110, COLORED);
-   //   Paint_DrawLine(&paint, 50, 60, 10, 110, COLORED);
-   //   Paint_DrawCircle(&paint, 120, 80, 30, COLORED);
-   //   Paint_DrawFilledRectangle(&paint, 10, 130, 50, 180, COLORED);
-   //   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
+    //   Paint_DrawLine(&paint, 10, 60, 50, 110, COLORED);
+    //   Paint_DrawLine(&paint, 50, 60, 10, 110, COLORED);
+    //   Paint_DrawCircle(&paint, 120, 80, 30, COLORED);
+    //   Paint_DrawFilledRectangle(&paint, 10, 130, 50, 180, COLORED);
+    //   Paint_DrawFilledCircle(&paint, 120, 150, 30, COLORED);
 
-      /* Display the frame_buffer */
-      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-      EPD_DisplayFrame(&epd);
-      EPD_DelayMs(&epd, 2);
+       /* Display the frame_buffer */
+       EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+       EPD_DisplayFrame(&epd);
+       EPD_DelayMs(&epd, 2);
 
-   if (EPD_Init(&epd, lut_partial_update) != 0) {
-     printf("e-Paper init failed\n");
-     return -1;
-   }
-   /**
-     *  there are 2 memory areas embedded in the e-paper display
-     *  and once the display is refreshed, the memory area will be auto-toggled,
-     *  i.e. the next action of SetFrameMemory will set the other memory area
-     *  therefore you have to set the frame memory and refresh the display twice.
-     */
-//   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
-//   EPD_DisplayFrame(&epd);
-//   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
-//   EPD_DisplayFrame(&epd);
-//////
-//   time_start_ms = HAL_GetTick();
+    if (EPD_Init(&epd, lut_partial_update) != 0) {
+      printf("e-Paper init failed\n");
+      return -1;
+    }
+    /**
+      *  there are 2 memory areas embedded in the e-paper display
+      *  and once the display is refreshed, the memory area will be auto-toggled,
+      *  i.e. the next action of SetFrameMemory will set the other memory area
+      *  therefore you have to set the frame memory and refresh the display twice.
+      */
+ //   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+ //   EPD_DisplayFrame(&epd);
+ //   EPD_SetFrameMemory(&epd, IMAGE_DATA, 0, 0, epd.width, epd.height);
+ //   EPD_DisplayFrame(&epd);
+ //////
+ //   time_start_ms = HAL_GetTick();
 
-  /* USER CODE END 2 */
+   /* USER CODE END 2 */
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+   /* Infinite loop */
+   /* USER CODE BEGIN WHILE */
+   while (1)
+   {
+	   HAL_UART_Transmit_IT(&huart3, sendUART, sizeSendUART);
+     /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
-	  if(conn == 0){
-	  Paint_Clear(&paint, UNCOLORED);
-	  EPD_DelayMs(&epd, 200);
-	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
-	  Paint_DrawStringAt(&paint, 80, 50, ".", &Font16, COLORED);
+     /* USER CODE BEGIN 3 */
+ 	  if(conn == 0){
+ 	  Paint_Clear(&paint, UNCOLORED);
+ 	  EPD_DelayMs(&epd, 200);
+ 	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+ 	  Paint_DrawStringAt(&paint, 80, 50, ".", &Font16, COLORED);
 
-      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-      EPD_DisplayFrame(&epd);
-      EPD_DelayMs(&epd, 2);
-
-
-	  Paint_Clear(&paint, UNCOLORED);
-	  EPD_DelayMs(&epd, 200);
-	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
-	  Paint_DrawStringAt(&paint, 80, 50, "..", &Font16, COLORED);
-
-      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-      EPD_DisplayFrame(&epd);
-      EPD_DelayMs(&epd, 2);
+       EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+       EPD_DisplayFrame(&epd);
+       EPD_DelayMs(&epd, 2);
 
 
-	  Paint_Clear(&paint, UNCOLORED);
-	  EPD_DelayMs(&epd, 200);
-	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
-	  Paint_DrawStringAt(&paint, 80, 50, "...", &Font16, COLORED);
+ 	  Paint_Clear(&paint, UNCOLORED);
+ 	  EPD_DelayMs(&epd, 200);
+ 	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+ 	  Paint_DrawStringAt(&paint, 80, 50, "..", &Font16, COLORED);
 
-      EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-      EPD_DisplayFrame(&epd);
-      EPD_DelayMs(&epd, 2);
-      licznik++;
-		  if (licznik == 1){
-			  conn = 1;
-		  }
-	  }
-	  else{
-		  sms_string[0] = '_';
-		 	   	   sms_string[14] = '_';
-		 Paint_Clear(&paint, UNCOLORED);
-		 EPD_DelayMs(&epd, 2);
+       EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+       EPD_DisplayFrame(&epd);
+       EPD_DelayMs(&epd, 2);
+
+
+ 	  Paint_Clear(&paint, UNCOLORED);
+ 	  EPD_DelayMs(&epd, 200);
+ 	  Paint_DrawStringAt(&paint, 30, 25, "Oczekiwanie", &Font16, COLORED);
+ 	  Paint_DrawStringAt(&paint, 80, 50, "...", &Font16, COLORED);
+
+       EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+       EPD_DisplayFrame(&epd);
+       EPD_DelayMs(&epd, 2);
+       licznik++;
+ 		  if (licznik == 1){
+ 			  conn = 1;
+ 		  }
+ 	  }
+ 	  else{
+ 		 sms_string[0] = '_';
+ 		 sms_string[14] = '_';
+ 		 Paint_Clear(&paint, UNCOLORED);
+ 		 EPD_DelayMs(&epd, 2);
+ 		 Paint_DrawRectangle(&paint, 10, 30, 190, 70, COLORED);
+ 		 Paint_DrawRectangle(&paint, 10, 80, 190, 170, COLORED);
+ 		 Paint_DrawStringAt(&paint, 110, 4, time_string, &Font24, COLORED);
+
+ 	   		Paint_DrawStringAt(&paint, 15, 40, sms_string, &Font16, COLORED);
+ 	   		Paint_DrawStringAt(&paint, 15, 100, sms_string, &Font16, COLORED);
+
+
+ 	   	   EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+ 	   	   EPD_DisplayFrame(&epd);
+ 	   	   EPD_DelayMs(&epd, 200);
+
+ 	   	   sms_string[0] = '*';
+ 	   	   sms_string[14] = '*';
+ 	   	Paint_Clear(&paint, UNCOLORED);
+		 Paint_DrawStringAt(&paint, 110, 4, time_string, &Font24, COLORED);
 		 Paint_DrawRectangle(&paint, 10, 30, 190, 70, COLORED);
 		 Paint_DrawRectangle(&paint, 10, 80, 190, 170, COLORED);
-		 Paint_DrawStringAt(&paint, 110, 4, time_string, &Font24, COLORED);
+ 	   	Paint_DrawStringAt(&paint, 20, 40, sms_string, &Font16, COLORED);
+ 	    Paint_DrawStringAt(&paint, 20, 100, sms_string, &Font16, COLORED);
+ 	    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+ 	    	   	   EPD_DisplayFrame(&epd);
+ 	    	   	   EPD_DelayMs(&epd, 200);
 
-	   		Paint_DrawStringAt(&paint, 15, 40, sms_string, &Font16, COLORED);
-	   		Paint_DrawStringAt(&paint, 15, 100, sms_string, &Font16, COLORED);
+ 	  }
 
-
-	   	   EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-	   	   EPD_DisplayFrame(&epd);
-	   	   EPD_DelayMs(&epd, 200);
-
-	   	   sms_string[0] = '*';
-	   	   sms_string[14] = '*';
-
-	   	Paint_DrawStringAt(&paint, 20, 40, sms_string, &Font16, COLORED);
-	    Paint_DrawStringAt(&paint, 20, 100, sms_string, &Font16, COLORED);
-	    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-	    	   	   EPD_DisplayFrame(&epd);
-	    	   	   EPD_DelayMs(&epd, 200);
-
-	  }
-//	  time_now_s = (HAL_GetTick() - time_start_ms) / 1000;
-//	    time_string[0] = time_now_s / 60 / 10 + '0';
-//	    time_string[1] = time_now_s / 60 % 10 + '0';
-//	    time_string[3] = time_now_s % 60 / 10 + '0';
-//	    time_string[4] = time_now_s % 60 % 10 + '0';
-//
-//	    Paint_SetWidth(&paint, 32);
-//	    Paint_SetHeight(&paint, 96);
-//	    Paint_SetRotate(&paint, ROTATE_270);
-//
-//	    Paint_Clear(&paint, UNCOLORED);
-//	    Paint_DrawStringAt(&paint, 0, 4, time_string, &Font24, COLORED);
-//	    EPD_SetFrameMemory(&epd, frame_buffer, 80, 72, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-//	    EPD_DisplayFrame(&epd);
-//
-//	    EPD_DelayMs(&epd, 500);
-  }
-  /* USER CODE END 3 */
+   }
+   /* USER CODE END 3 */
 }
 
 /**
@@ -408,7 +422,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 9600;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;
