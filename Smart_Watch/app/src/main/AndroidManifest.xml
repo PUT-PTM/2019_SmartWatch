@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.smart_watch">
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <application
@@ -20,11 +21,11 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".OdbiornikSMS"
-            android:enabled="true">
+        <receiver android:name="com.example.smart_watch.OdbiornikSMS" android:enabled="true"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS"/>
-                    <category android:name="android.intent.category.DEFAULT"></category>
+                    <category android:name="android.provider.Telephony.SMS_RECEIVED"></category>
             </intent-filter>
         </receiver>
     </application>

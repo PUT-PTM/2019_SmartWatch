@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,76 +28,117 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    Button wykryj_bluetooth, pokaz_sparowane, btn_czas, start;
-    TextView tekst;
+    Button wyslij, pokaz_sparowane, btn_czas, start;
+    TextView tekst, sms_text, czas;
+    EditText edit;
     BluetoothAdapter myBlueotoothAdapter;
     BluetoothSocket mySocket;
     BluetoothDevice myDevice;
     OutputStream out;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        wyslij = (Button)findViewById(R.id.wyslij);
+        edit = (EditText)findViewById(R.id.do_wyslania);
         start=(Button)findViewById(R.id.start);
         tekst=(TextView)findViewById(R.id.TEXT);
-        btn_czas=(Button)findViewById(R.id.CZAS);
-        wykryj_bluetooth=(Button)findViewById(R.id.wykryj);
+        czas= (TextView) findViewById(R.id.czas);
         pokaz_sparowane=(Button)findViewById(R.id.pokaz_spar);
-        btn_czas.setOnClickListener(new View.OnClickListener() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String address = extras.getString("MessageNumber");
+            String message = extras.getString("Message");
+           // TextView addressField = (TextView) findViewById(R.id.address);
+            TextView messageField = (TextView) findViewById(R.id.sms_text);
+            //addressField.setText("Message From : " +address);
+            messageField.setText("Messsage : "+message);
+        }
+        wyslij.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+2:00"));
-                Date currentLocalTime = cal.getTime();
-                DateFormat date = new SimpleDateFormat("HH:mm a");
-
-                date.setTimeZone(TimeZone.getTimeZone("GMT+2:00"));
-
-                String localTime = date.format(currentLocalTime);
-                tekst.setText(localTime);
+                String dane = edit.getText().toString();
+                try{
+                    sendData(dane);
+                }
+                catch (IOException x){}
             }
         });
+       /* msg = (Button)findViewById(R.id.CZAS);
+        msg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    sendData("1jakisfajnySMS\0");
+                    for (int i = 0; i <1000; i++) {
+                        System.out.println("+");
+                    }
+
+                    sendData("3694584808*********");
+                }
+                catch (IOException x){}
+            }
+        });*/
+
+
+        //btn_czas.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+          //  public void onClick(View v) {
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while(true) {
+
+                                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+2:00"));
+                                Date currentLocalTime = cal.getTime();
+                                DateFormat date = new SimpleDateFormat("HH:mm");
+                                DateFormat seconds = new SimpleDateFormat("s");
+                                final String sekundy = seconds.format(currentLocalTime);
+                                date.setTimeZone(TimeZone.getTimeZone("GMT+2:00"));
+
+                                final String localTime = date.format(currentLocalTime);
+                                Log.d("INFO", sekundy);
+                                if(sekundy.equals("0")){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                            czas.setText(localTime);
+
+                                                /*try{
+                                                    sendData("2"+localTime+"*************");
+                                                }
+                                                catch (IOException x){}*/
+
+                                } });
+
+                        }}
+                    }}).start();
+            //}
+        //});
 
        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // try{
+                try{
                     findBluetooth();
-                    //openBluetooth();
-               //   }
-                //catch (IOException ex){}
+                    openBluetooth();
+                 }
+                catch (IOException ex){}
             }
         });
+       pokaz_sparowane.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               pokazSparowane();
+           }
+       });
 
     }
-    private final BroadcastReceiver odbiorca= new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String akcja = intent.getAction();
-            if(BluetoothDevice.ACTION_FOUND.equals(akcja)){
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String status="";
-                if(device.getBondState() !=BluetoothDevice.BOND_BONDED){
-                    status="nie sparowane";
-                }
-                else {
-                    status="sparowane";
-                }
-                Log.d("INFO", "znaleziono urzadzenie"+device.getName()+" - "+device.getAddress());
-                tekst.setText("Znaleziono urządzenie"+device.getName()+" - "+device.getAddress());
-            }
 
-        }
-    };
-    public void wykryjInne(){
-        Log.d("Info","Szukam innych urzadzen(ok 12s)");
-        tekst.setText("Szukam innych urzadzen(ok 12s)");
-        IntentFilter filtr=new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(odbiorca,filtr);
-        BluetoothAdapter ba =BluetoothAdapter.getDefaultAdapter();
-        ba.startDiscovery();
 
-    }
     public void pokazSparowane(){
         Log.d("INFO", "Sparowane dla tego urzadzenia");
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -120,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         Set<BluetoothDevice> pairedDevices= myBlueotoothAdapter.getBondedDevices();
         if(pairedDevices.size()>0){
             for(BluetoothDevice device : pairedDevices){
-                if(device.getName().equals("HC-05")){
+                if(device.getName().equals("HC-06")){
                     myDevice = device;
                     break;
                 }
@@ -135,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         mySocket.connect();
         out = mySocket.getOutputStream();
         tekst.setText("Bluetooth Otwarte");
+        sendData("0000000000000000000");
 
     }
 

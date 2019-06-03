@@ -1,89 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="16px"
+    android:paddingRight="16px"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/TEXT"
-        android:layout_width="145dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginBottom="155dp"
         android:gravity="center"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toTopOf="@+id/wykryj"
-        app:layout_constraintEnd_toEndOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/CZAS" />
-
+        android:layout_marginTop="20px"
+        android:paddingTop="20px"
+        android:text="Status Bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <Button
-        android:id="@+id/CZAS"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="133dp"
-        android:layout_marginEnd="57dp"
-        android:layout_marginBottom="79dp"
-        android:background="@android:color/holo_blue_dark"
-        android:text="@string/disp_time"
-        app:layout_constraintBottom_toTopOf="@+id/TEXT"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="120dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="133dp"
-        android:layout_marginEnd="57dp"
-        android:layout_marginBottom="427dp"
-        android:background="@android:color/holo_blue_dark"
-        android:text="@string/sms_btn"
-        app:layout_constraintBottom_toTopOf="@+id/start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/CZAS"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/wykryj"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="66dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="184dp"
-        android:background="@android:color/holo_blue_dark"
-        android:text="Wykryj urzadzenia"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/pokaz_spar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TEXT" />
-
-    <Button
-        android:id="@+id/pokaz_spar"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="57dp"
-        android:layout_marginBottom="184dp"
-        android:background="@android:color/holo_blue_dark"
-        android:text="Pokaz sparowane"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/wykryj"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
+        android:layout_width="400px"
         android:id="@+id/start"
-        android:layout_width="152dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="114dp"
-        android:layout_marginBottom="51dp"
-        android:text="START"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        android:layout_marginTop="20px"
+        android:text="Start"
+        android:background="#EBD57C"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/sms_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:text="Wiadomosc SMS"
+        android:paddingTop="5px"
+        android:gravity="center"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20px"
+        android:text="Czas"
+        android:id="@+id/czas"
+        android:gravity="center"
 
-</android.support.constraint.ConstraintLayout>
+        android:paddingTop="5px"
+        />
+    <Button
+        android:layout_width="400px"
+        android:text="Pokaz sparowane"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:layout_gravity="center"
+        android:background="#B7D8E8"
+        android:id="@+id/pokaz_spar"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/do_wyslania"
+        android:hint="Wpisz tekst do wysłania"
+        android:gravity="center"
+        android:inputType="text"
+        android:paddingTop="5px"
+        android:layout_marginTop="400px"/>
+    <Button
+        android:layout_width="400px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Wyslij tekst"
+        android:background="#B7D8E8"
+        android:id="@+id/wyslij"/>
+</LinearLayout>
