@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.example.smart_watch.OdbiornikSMS" android:enabled="true"
+        <receiver android:name="OdbiornikSMS" android:enabled="true"
             android:exported="true" >
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS"/>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
                     <category android:name="android.provider.Telephony.SMS_RECEIVED"></category>
             </intent-filter>
         </receiver>

@@ -3,37 +3,46 @@ package com.example.smart_watch;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.telephony.SmsMessage;
+import android.telephony.*;
+import android.util.Log;
 import android.widget.Toast;
 
+
 final public class OdbiornikSMS extends BroadcastReceiver {
-
-
-    private static final String TAG = "Message recieved";
-
+    private static final String SMS_RECEIVED="android.provider.Telephony.SMS_RECEIVED";
+    private static final String TAG = "SmsBroadcastReceiver";
+    String msg, phoneNo ="";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Bundle pudsBundle = intent.getExtras();
-        Object[] pdus = (Object[]) pudsBundle.get("pdus");
-        SmsMessage messages =SmsMessage.createFromPdu((byte[]) pdus[0]);
+        Log.i(TAG , "IntentReceived: "+ intent.getAction());
+        if(intent.getAction()==SMS_RECEIVED)
+        {
+            Bundle dataBunndle = intent.getExtras();
+            if(dataBunndle!=null)
+            {
+                Object[] mypdu = (Object[])dataBunndle.get("pdus");
+                final SmsMessage[] message = new SmsMessage[mypdu.length];
+                for (int i = 0; i <mypdu.length ; i++) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    {
+                        String format = dataBunndle.getString("format");
+                        message[i]=SmsMessage.createFromPdu((byte[])mypdu[i],format);
+                    }
+                    else
+                    {
+                        message[i]= SmsMessage.createFromPdu((byte[])mypdu[i]);
+                    }
+                    msg = message[i].getMessageBody();
+                    phoneNo = message[i].getOriginatingAddress();
+                    
+                }
 
-        // Start Application's  MainActivty activity
+                Toast.makeText(context, "Message: "+msg+"\nNumber: "+phoneNo,Toast.LENGTH_LONG).show();
 
-        Intent smsIntent=new Intent(context,MainActivity.class);
-
-        smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        smsIntent.putExtra("MessageNumber", messages.getOriginatingAddress());
-
-        smsIntent.putExtra("Message", messages.getMessageBody());
-
-        context.startActivity(smsIntent);
-
-        // Get the Sender Message : messages.getMessageBody()
-        // Get the SenderNumber : messages.getOriginatingAddress()
-
-        Toast.makeText(context, "SMS Received From :"+messages.getOriginatingAddress()+"\n"+ messages.getMessageBody(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
 
