@@ -20,8 +20,7 @@ C_SRCS += \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
-../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_it.c 
+../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c 
 
 OBJS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o \
@@ -40,8 +39,7 @@ OBJS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_it.o 
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o 
 
 C_DEPS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.d \
@@ -60,8 +58,7 @@ C_DEPS += \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.d \
 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d \
-./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_it.d 
+./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -69,7 +66,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/%.o: ../Drivers/STM32F4xx_HAL_Driver/Src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Compiler'
 	@echo $(PWD)
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32F407xx -I"C:/Users/graba/Desktop/SmartWatch/2019_SmartWatch/Display/Inc" -I"C:/Users/graba/Desktop/SmartWatch/2019_SmartWatch/Display/Drivers/STM32F4xx_HAL_Driver/Inc" -I"C:/Users/graba/Desktop/SmartWatch/2019_SmartWatch/Display/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" -I"C:/Users/graba/Desktop/SmartWatch/2019_SmartWatch/Display/Drivers/CMSIS/Device/ST/STM32F4xx/Include" -I"C:/Users/graba/Desktop/SmartWatch/2019_SmartWatch/Display/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 '-D__weak=__attribute__((weak))' '-D__packed=__attribute__((__packed__))' -DUSE_HAL_DRIVER -DSTM32F407xx -I"C:/Users/Szymon/Desktop/bckp/Inc" -I"C:/Users/Szymon/Desktop/bckp/Drivers/STM32F4xx_HAL_Driver/Inc" -I"C:/Users/Szymon/Desktop/bckp/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy" -I"C:/Users/Szymon/Desktop/bckp/Drivers/CMSIS/Device/ST/STM32F4xx/Include" -I"C:/Users/Szymon/Desktop/bckp/Drivers/CMSIS/Include"  -Og -g3 -Wall -fmessage-length=0 -ffunction-sections -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
