@@ -10,11 +10,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd6413d9-1ff0-48cd-814e-70d0edb9d03b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/smart_watch/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/smart_watch/MainActivity.java" afterDir="false" />
-    </list>
+    <list default="true" id="fd6413d9-1ff0-48cd-814e-70d0edb9d03b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +63,7 @@
         <counts>
           <entry key="gradle" value="51" />
           <entry key="java" value="6715" />
-          <entry key="txt" value="211" />
+          <entry key="txt" value="225" />
           <entry key="xml" value="742" />
         </counts>
       </usages-collector>
@@ -75,7 +71,7 @@
         <counts>
           <entry key="Groovy" value="51" />
           <entry key="JAVA" value="6715" />
-          <entry key="PLAIN_TEXT" value="211" />
+          <entry key="PLAIN_TEXT" value="225" />
           <entry key="XML" value="742" />
         </counts>
       </usages-collector>
@@ -161,7 +157,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="474" />
     <option name="y" value="25" />
     <option name="width" value="721" />
@@ -325,7 +321,14 @@
       <option name="project" value="LOCAL" />
       <updated>1559601512302</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Wszystko śmiga">
+      <created>1559639949443</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1559639949487</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -338,7 +341,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
@@ -377,7 +380,8 @@
     <MESSAGE value="Dodanie socketu bluetooth" />
     <MESSAGE value="Poprawka Bluetooth" />
     <MESSAGE value="ObsługaSMS" />
-    <option name="LAST_COMMIT_MESSAGE" value="ObsługaSMS" />
+    <MESSAGE value="Wszystko śmiga" />
+    <option name="LAST_COMMIT_MESSAGE" value="Wszystko śmiga" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties">
