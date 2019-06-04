@@ -57,7 +57,7 @@ I used Bluetooth connection by the sockets to connect to Bluetooth Module HC-06 
 
 ### How to use:
   In the beggining you must give permissions to receive SMS. Then you must just click on button "Start". It will start connection with 
-  microcontroller STM-32. Time is sended in next minute.   You can also send your own data by typing text into EditText and click button "wyslij". If application receive SMS, it will be showed on the your phone's screen and also in the e-paper screen.  
+  microcontroller STM-32.  Time is sended in next minute. You can also send your own data by typing text into EditText and click button "wyslij". If application receive SMS, it will be showed on the your phone's screen and also in the e-paper screen.  
   In the top of window you can see actual Bluetooth Status or what was sended to the STM.
 
       
