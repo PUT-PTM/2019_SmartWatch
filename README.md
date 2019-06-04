@@ -1,14 +1,19 @@
 # 2019_SmartWatch
 
-Wyświetlacz ePaper 1,54' połączony za pomocą Bluetooth z aplikacją na telefony z systemem Android.
+
+Overwiew:
+  ePaper display 1,54' supported by Android application. Communication rely on Bluetooth module 2.0.
+  Project 
+ 
+Description:
+  Microcontroler communicates with An
 
 SmartWatch:
 
-Wykorzystano:
-- mikrokontroler STM32F4,
-- wyświetlacz w technologii ePaper 1,54",
-- modułe Bluettoth wersja 2.0 HC-06.
-
+Hardware:
+- STM32F4,
+- ePaper display 1,54",
+- Bluettoth module 2.0, HC-06.
 
 Setup:
 
@@ -28,6 +33,8 @@ Setup:
       RxD >> PB10
       TxD >> PB11
       
+  
+
       
 
 
