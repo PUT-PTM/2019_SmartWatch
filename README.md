@@ -22,7 +22,7 @@
 
 ### Pin connections:
 
-  - Screen:
+  - Screen:  
       CS >> PB6  
       RST >> PA9  
       BUSY >> PA8  
@@ -32,7 +32,7 @@
       GND >> GND  
       3.3V >> Vcc  
 
-  - Bluetooth
+  - Bluetooth  
       RxD >> PB10  
       TxD >> PB11  
       
