@@ -62,7 +62,10 @@ I used Bluetooth connection by the sockets to connect to Bluetooth Module HC-06 
   In the top of window you can see actual Bluetooth Status or what was sended to the STM.
 
       
+## Credits
+Szymon Szczot, Przemysław Wiktorowski
 
+The project was conducted during the Microprocessor Lab course held by the Institute of Control and Information Engineering, Poznan University of Technology. Supervisor: Tomasz Mańkowski
 
 
   
