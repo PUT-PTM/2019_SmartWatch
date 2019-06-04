@@ -14,7 +14,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 0;
     private IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+
+
+
+
+
 
     public void onResume() {
         super.onResume();
@@ -79,8 +86,27 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     Toast.makeText(context, "Message: "+msg+"\nNumber: "+phoneNo,Toast.LENGTH_LONG).show();
-                    sms.setText(msg);
+                    sms.setText(phoneNo+" : "+msg);
+                    phoneNo = "3"+phoneNo;
+                    msg= "1"+msg;
+                    if(msg.length()<18) {
+                        for (int i = phoneNo.length(); i < 19; i++) {
+                            phoneNo = phoneNo + "\0";
 
+                        }
+                        for (int j = msg.length(); j < 19; j++) {
+                            msg = msg + "\0";
+                        }
+                        try {
+                            sendData(phoneNo);
+                            for (int i = 0; i < 10000; i++) {
+                                Log.i("INFO", "1");
+
+                            }
+                            sendData(msg);
+                        } catch (IOException x) { }
+
+                    }
                 }
             }
 
@@ -124,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
                 String dane = edit.getText().toString();
                 dane = "1"+dane;
                 int lenght = dane.length();
-                for (int i =lenght; i <20 ; i++) {
-                    dane=dane+"*";
+                for (int i =lenght; i <19 ; i++) {
+                    dane=dane+"\0";
                 }
                 try{
                     sendData(dane);
@@ -174,10 +200,10 @@ public class MainActivity extends AppCompatActivity {
                                     public void run() {
                                             czas.setText(localTime);
 
-                                                /*try{
+                                                try{
                                                     sendData("2"+localTime+"*************");
                                                 }
-                                                catch (IOException x){}*/
+                                                catch (IOException x){}
 
                                 } });
 
@@ -252,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
     void sendData(String msg)throws IOException{
         msg+="\n";
         out.write(msg.getBytes());
-        tekst.setText("Dane wysłane");
+        tekst.setText("Dane wysłane: "+msg);
     }
 
     @Override
