@@ -23,21 +23,21 @@
 ### Pin connections:
 
   - Screen:
-      CS >> PB6
-      RST >> PA9
-      BUSY >> PA8
-      DC >> PC7
-      DIN >> PA7
-      CLK >> PA5
-      GND >> GND
-      3.3V >> Vcc
+      CS >> PB6  
+      RST >> PA9  
+      BUSY >> PA8  
+      DC >> PC7  
+      DIN >> PA7  
+      CLK >> PA5  
+      GND >> GND  
+      3.3V >> Vcc  
 
   - Bluetooth
-      RxD >> PB10
-      TxD >> PB11
+      RxD >> PB10  
+      TxD >> PB11  
       
 ### How to start:
-  Download repository, folder Smart_Watch install on your Android device.
+  Download repository, folder Smart_Watch install on your Android device.  
   In folder Display there's a project in C that should be Build and Compiled in Eclipse Java Oxygen environment, then pushed on STM.
   
 ### How it works:
