@@ -44,6 +44,20 @@
   Phone app sends communicates with flags in every message. Program on STM reads them and displays on specific place on the screen.
 
   
+# Application
+
+## Software
+-Android Studio
+
+## What I used?
+
+I used Bluetooth connection by the sockets to connect to Bluetooth Module HC-06 and BroadcastReceiver to receive SMS. Time is reading off and sending in new Thread.
+
+## Setup 
+
+### How to usee:
+  In the beggining you must give permissions to receive SMS. Then you must just click on button "Start". It will start connection with 
+  microcontroller STM-32. Time is sended in next minute. You can also send your own data by typing text into EditText and click button "wyslij". 
 
       
 
