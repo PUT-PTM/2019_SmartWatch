@@ -63,14 +63,17 @@ UART_HandleTypeDef huart3;
 uint8_t sendUART[2] = {65, 'F'};
 uint8_t sendUART2[2] = {'X', 'X'};
 uint16_t sizeSendUART = 2;
-uint8_t receiveUART[1];
+uint8_t receiveUART[20];
 uint8_t xd;
-uint16_t sizeReceiveUART = 1;
+uint16_t sizeReceiveUART = 20;
 int cnt;
 uint8_t time_string[] = {'1', '3', ':', '5', '6', '\0'};
-char sms_string[] = {'_', '_', '_', '_', '_', '_','_','_','_','_','_','_','_','_','_','\0'};
+char top_line[] = {'N', 'i', 'e', '_', 'm', 'a', '_','S','M','S', '\0'};
+char kto[] = {'P', 'T', 'M', '_', 'p', 'o','l','i','c','e', '_', '_','\0'};
+char bottom_line[] = {'_', '_', '_', '_', '_', '_', '_','_','_', '\0'};
 int conn = 0;
 int licznik = 0;
+uint8_t flag;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -83,14 +86,51 @@ static void MX_USART3_UART_Init(void);
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
    if(huart->Instance == USART3){
-	   sendUART[0] = receiveUART[0];
-	   sendUART[1] = 'X';
-	   sms_string[2] = 'A';
-	   if(receiveUART[0] != '\r'){
-	   sms_string[3] = receiveUART[0];
+
+	   flag = receiveUART[0];
+	   if(flag == '0'){
+		   conn = 1;
+	   }else if (flag == '1'){
+		   top_line[0] = receiveUART[1];
+		   top_line[1] = receiveUART[2];
+		   top_line[2] = receiveUART[3];
+		   top_line[3] = receiveUART[4];
+		   top_line[4] = receiveUART[5];
+		   top_line[5] = receiveUART[6];
+		   top_line[6] = receiveUART[7];
+		   top_line[7] = receiveUART[8];
+		   top_line[8] = receiveUART[9];
+		   top_line[9] = receiveUART[10];
+		   bottom_line[0] = receiveUART[11];
+		   bottom_line[1] = receiveUART[12];
+		   bottom_line[2] = receiveUART[13];
+		   bottom_line[3] = receiveUART[14];
+		   bottom_line[4] = receiveUART[15];
+		   bottom_line[5] = receiveUART[16];
+		   bottom_line[6] = receiveUART[17];
+		   bottom_line[7] = receiveUART[18];
+		   bottom_line[8] = receiveUART[19];
+	   }else if(flag == '2'){
+		   time_string[0] = receiveUART[1];
+		   time_string[1] = receiveUART[2];
+		   time_string[3] = receiveUART[4];
+		   time_string[4] = receiveUART[5];
+	   }else if(flag == '3'){
+		   kto[0] = receiveUART[1];
+		   kto[1] = receiveUART[2];
+		   kto[2] = receiveUART[3];
+		   kto[3] = receiveUART[4];
+		   kto[4] = receiveUART[5];
+		   kto[5] = receiveUART[6];
+		   kto[6] = receiveUART[7];
+		   kto[7] = receiveUART[8];
+		   kto[8] = receiveUART[9];
+		   kto[9] = receiveUART[10];
+		   kto[10] = receiveUART[11];
+		   kto[11] = receiveUART[12];
+
 	   }
 
-	   for(int i = 0;i<100000;i++){}
 	HAL_UART_Receive_IT(&huart3, receiveUART, sizeReceiveUART);
    }
 
@@ -112,8 +152,6 @@ int main(void)
 
 	unsigned char* frame_buffer = (unsigned char*)malloc(EPD_WIDTH * EPD_HEIGHT / 8);
 
-	  unsigned long time_start_ms;
-	  unsigned long time_now_s;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -220,10 +258,10 @@ int main(void)
    /* USER CODE BEGIN WHILE */
    while (1)
    {
-	   HAL_UART_Transmit_IT(&huart3, sendUART, sizeSendUART);
      /* USER CODE END WHILE */
 
      /* USER CODE BEGIN 3 */
+
  	  if(conn == 0){
  	  Paint_Clear(&paint, UNCOLORED);
  	  EPD_DelayMs(&epd, 200);
@@ -253,42 +291,23 @@ int main(void)
        EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
        EPD_DisplayFrame(&epd);
        EPD_DelayMs(&epd, 2);
-       licznik++;
- 		  if (licznik == 1){
- 			  conn = 1;
- 		  }
  	  }
  	  else{
- 		 sms_string[0] = '_';
- 		 sms_string[14] = '_';
  		 Paint_Clear(&paint, UNCOLORED);
  		 EPD_DelayMs(&epd, 2);
  		 Paint_DrawRectangle(&paint, 10, 30, 190, 70, COLORED);
  		 Paint_DrawRectangle(&paint, 10, 80, 190, 170, COLORED);
- 		 Paint_DrawStringAt(&paint, 110, 4, time_string, &Font24, COLORED);
+ 		Paint_DrawStringAt(&paint, 30, 43, kto, &Font16, COLORED);
+ 	   	Paint_DrawStringAt(&paint, 20, 100, top_line, &Font24, COLORED);
+ 	   	Paint_DrawStringAt(&paint, 20, 140, bottom_line, &Font24, COLORED);
+ 	   	Paint_DrawStringAt(&paint, 110, 5, time_string, &Font24, COLORED);
 
- 	   		Paint_DrawStringAt(&paint, 15, 40, sms_string, &Font16, COLORED);
- 	   		Paint_DrawStringAt(&paint, 15, 100, sms_string, &Font16, COLORED);
+ 	   EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
+ 	   EPD_DisplayFrame(&epd);
 
-
- 	   	   EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
- 	   	   EPD_DisplayFrame(&epd);
- 	   	   EPD_DelayMs(&epd, 200);
-
- 	   	   sms_string[0] = '*';
- 	   	   sms_string[14] = '*';
- 	   	Paint_Clear(&paint, UNCOLORED);
-		 Paint_DrawStringAt(&paint, 110, 4, time_string, &Font24, COLORED);
-		 Paint_DrawRectangle(&paint, 10, 30, 190, 70, COLORED);
-		 Paint_DrawRectangle(&paint, 10, 80, 190, 170, COLORED);
- 	   	Paint_DrawStringAt(&paint, 20, 40, sms_string, &Font16, COLORED);
- 	    Paint_DrawStringAt(&paint, 20, 100, sms_string, &Font16, COLORED);
- 	    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
- 	    	   	   EPD_DisplayFrame(&epd);
- 	    	   	   EPD_DelayMs(&epd, 200);
 
  	  }
-
+ 	  	  HAL_UART_Receive_IT(&huart3, receiveUART, sizeReceiveUART);
    }
    /* USER CODE END 3 */
 }
