@@ -6,10 +6,10 @@
   Project 
  
 ## Description:
-  Microcontroler communicates with Android app by Bluetooth. Functions included:
-    - displaying incoming SMS in real time,
-    - displaying current time,
-    - displying who send SMS.
+  Microcontroler communicates with Android app by Bluetooth. Functions included:  
+    - displaying incoming SMS in real time,  
+    - displaying current time,  
+    - displying who send SMS.  
 
 # SmartWatch:
 
