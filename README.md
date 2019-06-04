@@ -1,7 +1,7 @@
 # 2019_SmartWatch
 
 
-#Overwiew:
+# Overwiew:
   ePaper display 1,54' supported by Android application. Communication rely on Bluetooth module 2.0.
   Project 
  
